@@ -1,0 +1,528 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Water Traces</title>
+<style>
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  background: #fff;
+  color: #272b2c;
+  font-family: Arial, sans-serif;
+  transition: background 1s, color 1s;
+}
+
+canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+}
+
+.brand {
+  position: fixed;
+  top: 38px;
+  left: 44px;
+  font-size: 13px;
+  letter-spacing: 4px;
+  pointer-events: none;
+}
+
+h1 {
+  position: fixed;
+  left: 8%;
+  bottom: 20%;
+  margin: 0;
+  font: normal clamp(32px, 3.5vw, 48px) Georgia, serif;
+  pointer-events: none;
+}
+
+footer {
+  position: fixed;
+  bottom: 36px;
+  left: 44px;
+  right: 44px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+}
+
+.hint {
+  font-size: 11px;
+  line-height: 1.8;
+}
+
+nav {
+  display: flex;
+  gap: 28px;
+}
+
+button {
+  padding: 8px 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: 11px Arial, sans-serif;
+  cursor: pointer;
+}
+
+button.active {
+  text-decoration: underline;
+  text-underline-offset: 6px;
+}
+
+button:focus-visible {
+  outline: 1px solid currentColor;
+  outline-offset: 5px;
+}
+
+@media (max-width: 650px) {
+  .brand {
+    top: 26px;
+    left: 24px;
+    font-size: 11px;
+  }
+
+  h1 {
+    bottom: 25%;
+  }
+
+  footer {
+    left: 24px;
+    right: 24px;
+    bottom: 24px;
+    display: block;
+  }
+
+  nav {
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 20px;
+  }
+
+  .hint {
+    font-size: 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body { transition: none; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="water" aria-label="Interactive water canvas"></canvas>
+
+<div class="brand">WATER TRACES</div>
+
+<h1 id="title">Water stains</h1>
+
+<footer>
+  <div class="hint" id="hint">
+    Click anywhere. Each click adds a different color.
+  </div>
+
+  <nav aria-label="Scenes">
+    <button class="active" data-scene="0" aria-current="page">
+      Stains
+    </button>
+    <button data-scene="1">Footprints</button>
+    <button data-scene="2">Tears</button>
+    <button data-scene="3">Rain</button>
+  </nav>
+</footer>
+
+<script>
+const canvas = document.querySelector("#water");
+const ctx = canvas.getContext("2d");
+
+const scenes = [
+  {
+    title: "Water stains",
+    hint: "Click anywhere. Each click adds a different color.",
+    background: "#ffffff"
+  },
+  {
+    title: "Footprints",
+    hint: "Move or drag to leave wet footprints.",
+    background: "#f6f7f5"
+  },
+  {
+    title: "Tears",
+    hint: "Click or hold to release a tear.",
+    background: "#f4f6f8"
+  },
+  {
+    title: "Rain",
+    hint: "Click anywhere to add ripples.",
+    background: "#10191c"
+  }
+];
+
+const colors = [
+  "104,139,159",
+  "181,128,130",
+  "164,155,109",
+  "121,149,128",
+  "145,130,166"
+];
+
+let width, height;
+let scene = 0;
+let marks = [];
+let ripples = [];
+let drops = [];
+let clicks = 0;
+let lastStep = null;
+let holdTimer = null;
+let previousTime = 0;
+
+const reducedMotion =
+  matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+function resize() {
+  width = innerWidth;
+  height = innerHeight;
+
+  const ratio = Math.min(devicePixelRatio || 1, 2);
+  canvas.width = width * ratio;
+  canvas.height = height * ratio;
+  ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+}
+
+addEventListener("resize", resize);
+resize();
+
+function addMark(x, y, size, color, footprint = false) {
+  const points = [];
+  const seed = Math.random() * 10;
+
+  for (let i = 0; i < 64; i++) {
+    const angle = i / 64 * Math.PI * 2;
+    const radius = size * (
+      1 +
+      0.09 * Math.sin(angle * 3 + seed) +
+      0.045 * Math.sin(angle * 7 + seed)
+    );
+
+    points.push([
+      Math.cos(angle) * radius,
+      Math.sin(angle) * radius * (footprint ? 1.65 : 0.8)
+    ]);
+  }
+
+  marks.push({
+    x, y, size, color, points,
+    footprint,
+    age: 0,
+    angle: clicks % 2 ? -0.17 : 0.17
+  });
+
+  if (marks.length > 80) marks.shift();
+}
+
+function addRipple(x, y, scale = 1) {
+  ripples.push({ x, y, scale, age: 0 });
+  if (ripples.length > 100) ripples.shift();
+}
+
+function interact(x, y) {
+  clicks++;
+
+  if (scene === 0) {
+    addMark(
+      x, y,
+      35 + Math.random() * 42,
+      colors[(clicks - 1) % colors.length]
+    );
+    addRipple(x, y, 0.65);
+  }
+
+  if (scene === 1) {
+    const stepX = x + (clicks % 2 ? 12 : -12);
+    addMark(
+      stepX, y,
+      12 + Math.random() * 4,
+      "108,139,145",
+      true
+    );
+    addRipple(stepX, y, 0.7);
+  }
+
+  if (scene === 2) {
+    drops.push({
+      x, y,
+      speed: 1.1,
+      length: 16 + Math.random() * 12,
+      tear: true
+    });
+  }
+
+  if (scene === 3) {
+    addRipple(x, y, 1.5);
+  }
+}
+
+function stopHolding() {
+  clearInterval(holdTimer);
+  holdTimer = null;
+}
+
+canvas.addEventListener("pointerdown", event => {
+  canvas.setPointerCapture(event.pointerId);
+  lastStep = { x: event.clientX, y: event.clientY };
+
+  interact(event.clientX, event.clientY);
+  stopHolding();
+
+  if (scene === 2) {
+    holdTimer = setInterval(() => {
+      interact(
+        event.clientX + (Math.random() - 0.5) * 16,
+        event.clientY
+      );
+    }, 400);
+  }
+});
+
+canvas.addEventListener("pointermove", event => {
+  if (scene !== 1) return;
+
+  if (
+    !lastStep ||
+    Math.hypot(
+      event.clientX - lastStep.x,
+      event.clientY - lastStep.y
+    ) > 46
+  ) {
+    interact(event.clientX, event.clientY);
+    lastStep = { x: event.clientX, y: event.clientY };
+  }
+});
+
+canvas.addEventListener("pointerup", stopHolding);
+canvas.addEventListener("pointercancel", stopHolding);
+canvas.addEventListener("lostpointercapture", stopHolding);
+addEventListener("blur", stopHolding);
+
+function addRain(initial = false) {
+  drops.push({
+    x: Math.random() * width,
+    y: initial ? Math.random() * height * 0.4 : -60,
+    speed: 4 + Math.random() * 7,
+    length: 15 + Math.random() * 55,
+    target: height * (0.45 + Math.random() * 0.55),
+    tear: false
+  });
+}
+
+function selectScene(index) {
+  scene = (index + scenes.length) % scenes.length;
+
+  stopHolding();
+  marks = [];
+  ripples = [];
+  drops = [];
+  lastStep = null;
+
+  document.body.style.background = scenes[scene].background;
+  document.body.style.color =
+    scene === 3 ? "#edf1f1" : "#272b2c";
+
+  document.querySelector("#title").textContent =
+    scenes[scene].title;
+
+  document.querySelector("#hint").textContent =
+    scenes[scene].hint;
+
+  document.querySelectorAll("[data-scene]").forEach((button, i) => {
+    button.classList.toggle("active", i === scene);
+
+    if (i === scene) {
+      button.setAttribute("aria-current", "page");
+    } else {
+      button.removeAttribute("aria-current");
+    }
+  });
+
+  if (scene === 3) {
+    for (let i = 0; i < 65; i++) addRain(true);
+  }
+}
+
+document.querySelectorAll("[data-scene]").forEach(button => {
+  button.addEventListener("click", () => {
+    selectScene(Number(button.dataset.scene));
+  });
+});
+
+addEventListener("keydown", event => {
+  if (event.key === "ArrowRight") selectScene(scene + 1);
+  if (event.key === "ArrowLeft") selectScene(scene - 1);
+});
+
+function drawMarks(dt) {
+  for (const mark of marks) {
+    mark.age += dt;
+
+    const fade =
+      Math.min(1, mark.age / 32) *
+      Math.max(0, 1 - mark.age / 2200);
+
+    ctx.save();
+    ctx.translate(mark.x, mark.y);
+    ctx.rotate(mark.angle);
+    ctx.scale(0.85 + Math.min(1, mark.age / 24) * 0.15, 1);
+
+    const gradient = ctx.createRadialGradient(
+      0, 0, mark.size * 0.05,
+      0, 0, mark.size
+    );
+
+    gradient.addColorStop(
+      0, `rgba(${mark.color},${0.035 * fade})`
+    );
+    gradient.addColorStop(
+      0.72, `rgba(${mark.color},${0.06 * fade})`
+    );
+    gradient.addColorStop(
+      0.94, `rgba(${mark.color},${0.14 * fade})`
+    );
+    gradient.addColorStop(1, `rgba(${mark.color},0)`);
+
+    ctx.beginPath();
+
+    mark.points.forEach((point, i) => {
+      if (i === 0) ctx.moveTo(...point);
+      else ctx.lineTo(...point);
+    });
+
+    ctx.closePath();
+    ctx.fillStyle = gradient;
+    ctx.fill();
+    ctx.strokeStyle = `rgba(${mark.color},${0.14 * fade})`;
+    ctx.lineWidth = 0.65;
+    ctx.stroke();
+
+    if (mark.footprint) {
+      ctx.beginPath();
+      ctx.ellipse(0, 5, 6, 12, 0, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${mark.color},${0.06 * fade})`;
+      ctx.fill();
+    }
+
+    ctx.restore();
+  }
+
+  marks = marks.filter(mark => mark.age < 2200);
+}
+
+function drawRipples(dt) {
+  for (const ripple of ripples) {
+    ripple.age += dt;
+    const fade = Math.max(0, 1 - ripple.age / 100);
+
+    for (let i = 0; i < 3; i++) {
+      const radius = (ripple.age * 0.8 + i * 12) * ripple.scale;
+
+      ctx.beginPath();
+      ctx.ellipse(
+        ripple.x,
+        ripple.y,
+        radius,
+        radius * (scene === 3 ? 0.24 : 0.55),
+        0,
+        i * 0.1,
+        Math.PI * 2 - i * 0.25
+      );
+
+      ctx.strokeStyle = scene === 3
+        ? `rgba(177,204,211,${fade * 0.23})`
+        : `rgba(111,143,157,${fade * 0.2})`;
+
+      ctx.lineWidth = 0.7;
+      ctx.stroke();
+    }
+  }
+
+  ripples = ripples.filter(ripple => ripple.age < 100);
+}
+
+function drawDrops(dt) {
+  if (scene === 3 && !reducedMotion && Math.random() < 0.6 * dt) {
+    addRain();
+  }
+
+  for (const drop of drops) {
+    drop.y += drop.speed * dt;
+
+    if (drop.tear) {
+      drop.speed += 0.045 * dt;
+
+      ctx.save();
+      ctx.translate(drop.x, drop.y);
+      ctx.beginPath();
+      ctx.moveTo(0, -drop.length);
+      ctx.bezierCurveTo(-12, 0, -9, 10, 0, 11);
+      ctx.bezierCurveTo(9, 10, 12, 0, 0, -drop.length);
+      ctx.fillStyle = "rgba(143,169,187,0.07)";
+      ctx.strokeStyle = "rgba(107,139,159,0.36)";
+      ctx.lineWidth = 0.8;
+      ctx.fill();
+      ctx.stroke();
+      ctx.restore();
+
+      if (drop.y > height * 0.8) {
+        addRipple(drop.x, height * 0.8, 0.6);
+        addMark(drop.x, height * 0.8, 20, "135,160,180");
+        drop.dead = true;
+      }
+    } else {
+      ctx.beginPath();
+      ctx.moveTo(drop.x, drop.y);
+      ctx.lineTo(drop.x - 1.5, drop.y + drop.length);
+      ctx.strokeStyle = "rgba(195,215,220,0.22)";
+      ctx.lineWidth = 0.65;
+      ctx.stroke();
+
+      if (drop.y + drop.length >= drop.target) {
+        addRipple(drop.x, drop.target, 0.5 + Math.random());
+        drop.dead = true;
+      }
+    }
+  }
+
+  drops = drops.filter(drop => !drop.dead);
+}
+
+function animate(time) {
+  const dt = Math.min((time - previousTime) / 16.67 || 1, 2);
+  previousTime = time;
+
+  ctx.clearRect(0, 0, width, height);
+  drawMarks(dt);
+  drawRipples(dt);
+  drawDrops(dt);
+
+  requestAnimationFrame(animate);
+}
+
+addMark(width * 0.58, height * 0.42, 64, colors[0]);
+addMark(width * 0.67, height * 0.51, 25, colors[0]);
+requestAnimationFrame(animate);
+</script>
+
+</body>
+</html>
