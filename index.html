@@ -1,528 +1,148 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Water Traces</title>
 <style>
-* { box-sizing: border-box; }
-
-html, body {
-  margin: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
+*{box-sizing:border-box}html,body{margin:0;height:100%;overflow:hidden}body{font-family:Georgia,"Times New Roman",serif;color:#202020;background:#fff}button,input,select{font:inherit;color:inherit}button,a{touch-action:manipulation}button{cursor:pointer;background:transparent;border:0}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:1px solid currentColor;outline-offset:5px}button:disabled{cursor:default;opacity:.4}a{color:inherit}#water{position:fixed;inset:0;width:100%;height:100%;touch-action:none}header{position:fixed;top:30px;left:4%;right:4%;z-index:3;display:flex;justify-content:flex-end;align-items:center}.brand{font-size:12px;letter-spacing:3px;padding:5px 0}header nav{display:flex;gap:25px}header nav button{font-size:12px;padding:8px 0}main{position:fixed;inset:0;pointer-events:none}.page{position:absolute;inset:0;opacity:0;visibility:hidden;transform:translateY(35px);transition:opacity .55s,transform .9s,visibility .9s}.page.active{visibility:visible;opacity:1;transform:none}.page h1{position:absolute;left:7%;top:23%;margin:0;font:normal clamp(64px,11vw,166px)/.94 Georgia,serif;letter-spacing:-.055em}.page p{font-size:16px;line-height:1.75}.word{display:inline-block;white-space:nowrap}.char{display:inline-block;white-space:pre;opacity:0;transform:translateY(12px);transition:opacity .8s,transform 1s}.active .char{opacity:1;transform:none}.home h1{top:27%;font-size:clamp(80px,15vw,220px)}.intro{position:absolute;left:61%;top:58%;width:28%;pointer-events:auto}.text-button{padding:10px 0;border-bottom:1px solid currentColor;font-size:13px}.explore h1,.gallery h1,.create h1,.about h1{top:17%;font-size:clamp(52px,7vw,100px)}.choices{position:absolute;left:7%;right:7%;top:43%;display:grid;grid-template-columns:repeat(4,1fr);gap:25px;pointer-events:auto}.choice{text-align:left;padding:0}.choice canvas{display:block;width:100%;aspect-ratio:1.3;background:#f6f7f6}.choice span{display:block;font:normal 25px Georgia,serif;margin-top:15px}.choice:hover canvas{transform:translateY(-5px);transition:transform .4s}.scene h1{top:auto;bottom:23%;pointer-events:none}.create h1{pointer-events:none;font-size:clamp(45px,6vw,88px)}.create-tools{position:absolute;left:7%;top:43%;width:210px;display:grid;gap:20px;pointer-events:auto}.create-tools label{font-size:12px;display:grid;gap:9px}.create-tools input,.create-tools select{border:0;border-bottom:1px solid #aaa;background:transparent;padding:9px 0;border-radius:0;min-width:0}.create-tools input[type=color]{height:35px;width:50px;border:0;padding:0}.create-tools small{font-size:11px;line-height:1.6}footer{position:fixed;z-index:3;bottom:25px;left:4%;right:4%;display:flex;justify-content:space-between;align-items:center;gap:30px}#hint{font-size:11px;line-height:1.7;max-width:380px}footer nav{display:flex;gap:20px}footer button{font-size:11px;padding:8px 0}button.current{text-decoration:underline;text-underline-offset:6px}.about-copy{position:absolute;left:51%;top:35%;width:39%;max-height:47%;overflow:auto;pointer-events:auto}.gallery-list{position:absolute;left:7%;right:7%;top:38%;bottom:16%;overflow:auto;pointer-events:auto;display:grid;grid-template-columns:repeat(3,1fr);gap:24px;align-content:start}.art-card{padding:0;text-align:left}.art-card canvas{width:100%;display:block;background:white;border:1px solid #eee}.art-card span{font-size:12px;display:block;padding-top:10px}.gallery-controls{position:absolute;left:7%;bottom:10%;pointer-events:auto;display:flex;gap:25px;align-items:center}.status{font-size:12px;line-height:1.6;max-width:460px}.gallery-list>.status{grid-column:1/-1}.art-layout{position:absolute;left:7%;right:7%;top:20%;bottom:17%;display:grid;grid-template-columns:2fr 1fr;gap:6%;align-items:center;pointer-events:auto}#artwork{width:100%;border:1px solid #eee}.art-layout h1{position:static;font-size:clamp(35px,5vw,64px)}.art-layout p{font-size:13px}#art-link{word-break:break-all;font-size:12px}#gate{position:fixed;inset:0;background:white;z-index:10;display:grid;place-items:center;transition:opacity 1s,visibility 1s}#gate.closed{opacity:0;visibility:hidden;pointer-events:none}#enter{width:82px;height:82px;border:1px solid #bbb;border-radius:50%;font:normal 28px Georgia,serif;transition:transform .6s}#enter:hover{transform:scale(1.13)}body.waiting header,body.waiting footer{visibility:hidden}
+@media(max-width:700px){header{top:20px;left:6%;right:6%}header nav{gap:15px}.brand{font-size:10px;letter-spacing:2px}.page h1{font-size:70px}.home h1{top:25%;font-size:100px}.intro{left:8%;top:61%;width:75%}.intro p{font-size:14px}.choices{top:34%;grid-template-columns:repeat(2,1fr);gap:22px 18px}.choice canvas{aspect-ratio:1.8}.choice span{font-size:20px;margin-top:8px}.explore h1,.gallery h1,.about h1{top:16%;font-size:58px}footer{left:6%;right:6%;bottom:17px;display:block}footer nav{margin-top:10px;gap:0;justify-content:space-between}footer button{font-size:10px}#hint{font-size:10px;min-height:17px}.create h1{top:15%;font-size:45px}.create-tools{top:auto;bottom:21%;width:86%;grid-template-columns:1fr 1fr;gap:12px 20px}.create-tools label{font-size:11px}.create-tools small{grid-column:1/-1}.create-tools .status{grid-column:1/-1}.about-copy{top:31%;left:8%;width:84%;max-height:47%}.about-copy p{font-size:15px}.gallery-list{top:30%;bottom:22%;grid-template-columns:repeat(2,1fr);gap:20px 12px}.gallery-controls{bottom:15%;right:7%;gap:15px}.gallery-controls .status{font-size:10px}.art-layout{top:20%;bottom:22%;display:block;overflow:auto}.art-layout h1{font-size:36px;margin-top:20px}.art-layout p{margin:12px 0}.scene h1{font-size:70px;bottom:26%}}
+@media(prefers-reduced-motion:reduce){.page,.char,#gate,#enter{transition:none!important;transform:none!important}}
+#glass-scene{position:fixed;inset:0;width:100%;height:100%;border:0;z-index:1;pointer-events:none}main{z-index:2}
+/* A bouncing entrance, with a short compression on contact. */
+#gate{overflow:hidden;background:#fafaf8;transition:opacity .65s,visibility .65s}
+#enter{position:absolute;left:calc(50% - var(--ball)/2);top:43%;--ball:clamp(22px,3vmin,38px);width:var(--ball);height:var(--ball);padding:0;background:#0b0b0b;border:0;border-radius:50%;animation:entrance-bounce 2.2s infinite;transform-origin:center bottom;will-change:transform;transition:none;z-index:1}
+#enter:hover{background:#202020}
+#enter::after{content:"";position:absolute;inset:-14px;border-radius:50%}
+#enter:focus-visible{outline:2px solid #555;outline-offset:12px}
+.gate-title{position:absolute;bottom:-.12em;left:50%;transform:translateX(-50%);white-space:nowrap;font:normal clamp(100px,21vw,380px)/.9 Arial,Helvetica,sans-serif;letter-spacing:-.075em;color:#0b0b0b;pointer-events:none}
+@keyframes entrance-bounce{
+  0%,100%{transform:translateY(0) scale(1.02,.98);animation-timing-function:cubic-bezier(.5,0,.85,.55)}
+  40%{transform:translateY(5.5vh) scale(.94,1.07);animation-timing-function:ease-out}
+  45%{transform:translateY(6vh) scale(1.14,.84);animation-timing-function:ease-out}
+  54%{transform:translateY(4vh) scale(.97,1.04);animation-timing-function:cubic-bezier(.15,.55,.4,1)}
+  100%{transform:translateY(0) scale(1.02,.98)}
 }
+@media(prefers-reduced-motion:reduce){#enter{animation:none;transform:none}}
 
-body {
-  background: #fff;
-  color: #272b2c;
-  font-family: Arial, sans-serif;
-  transition: background 1s, color 1s;
-}
-
-canvas {
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  touch-action: none;
-}
-
-.brand {
-  position: fixed;
-  top: 38px;
-  left: 44px;
-  font-size: 13px;
-  letter-spacing: 4px;
-  pointer-events: none;
-}
-
-h1 {
-  position: fixed;
-  left: 8%;
-  bottom: 20%;
-  margin: 0;
-  font: normal clamp(32px, 3.5vw, 48px) Georgia, serif;
-  pointer-events: none;
-}
-
-footer {
-  position: fixed;
-  bottom: 36px;
-  left: 44px;
-  right: 44px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 24px;
-}
-
-.hint {
-  font-size: 11px;
-  line-height: 1.8;
-}
-
-nav {
-  display: flex;
-  gap: 28px;
-}
-
-button {
-  padding: 8px 0;
-  border: 0;
-  background: none;
-  color: inherit;
-  font: 11px Arial, sans-serif;
-  cursor: pointer;
-}
-
-button.active {
-  text-decoration: underline;
-  text-underline-offset: 6px;
-}
-
-button:focus-visible {
-  outline: 1px solid currentColor;
-  outline-offset: 5px;
-}
-
-@media (max-width: 650px) {
-  .brand {
-    top: 26px;
-    left: 24px;
-    font-size: 11px;
-  }
-
-  h1 {
-    bottom: 25%;
-  }
-
-  footer {
-    left: 24px;
-    right: 24px;
-    bottom: 24px;
-    display: block;
-  }
-
-  nav {
-    justify-content: space-between;
-    gap: 16px;
-    margin-top: 20px;
-  }
-
-  .hint {
-    font-size: 10px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  body { transition: none; }
-}
+/* Quiet editorial details, with motion reserved for entry and interaction. */
+header nav button,footer nav button{position:relative}
+header nav button::after,footer nav button::after{content:"";position:absolute;left:0;right:0;bottom:2px;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .35s}
+header nav button:hover::after,footer nav button:hover::after{transform:scaleX(1)}
+.intro{border-top:1px solid #aab7b1;padding-top:18px}
+.choice canvas{border-radius:2px 2px 32px 2px;transition:transform .5s,border-radius .5s}
+.choice:hover canvas{border-radius:32px 2px 2px 2px}
+.rain-page h1{font-size:clamp(90px,16vw,240px);bottom:18%;line-height:.85}
+.rain-period{color:#a6c0ba}
+.rain-caption{position:absolute;top:23%;right:8%;max-width:240px;border-top:1px solid #819b9e;padding-top:16px}
+.rain-caption span{font-size:11px;font-style:italic;letter-spacing:.06em;color:#b4ccca}
+.rain-caption p{font-size:clamp(17px,2vw,26px);line-height:1.4}
+.rain-edge{position:absolute;left:7%;right:7%;bottom:14%;height:1px;background:linear-gradient(90deg,#b4ccca66,transparent);transform:scaleX(0);transform-origin:left;transition:transform 1.6s .2s}
+.active .rain-edge{transform:scaleX(1)}
+.rain-caption{opacity:0;transform:translateY(18px);transition:opacity 1s .3s,transform 1s .3s}
+.active .rain-caption{opacity:1;transform:none}
+@media(max-width:700px){.rain-caption{top:20%;right:8%;max-width:185px}.rain-page h1{bottom:28%;font-size:120px}.rain-edge{bottom:24%}}
+@media(prefers-reduced-motion:reduce){.rain-caption,.rain-edge,.choice canvas,header nav button::after,footer nav button::after{transition:none;transform:none}.rain-caption{opacity:1}}
 </style>
 </head>
-<body>
-
+<body class="waiting">
+<iframe id="glass-scene" src="studies/glass/index.html?embed=1" title="Glass water material" aria-hidden="true" tabindex="-1" hidden></iframe>
 <canvas id="water" aria-label="Interactive water canvas"></canvas>
-
-<div class="brand">WATER TRACES</div>
-
-<h1 id="title">Water stains</h1>
-
-<footer>
-  <div class="hint" id="hint">
-    Click anywhere. Each click adds a different color.
-  </div>
-
-  <nav aria-label="Scenes">
-    <button class="active" data-scene="0" aria-current="page">
-      Stains
-    </button>
-    <button data-scene="1">Footprints</button>
-    <button data-scene="2">Tears</button>
-    <button data-scene="3">Rain</button>
-  </nav>
-</footer>
-
+<div id="gate"><div class="gate-title" aria-hidden="true">WATER TRACES</div><button id="enter" aria-label="Enter Water Traces"></button></div>
+<header><nav aria-label="Main navigation"><button data-page="gallery">Collection</button><button data-page="about">About</button></nav></header>
+<main>
+<section class="page home" data-name="home"><h1>Water<br>Traces</h1><div class="intro"><p>Water leaves a mark.<br>Make one of your own.</p><button class="text-button" data-page="explore">Explore the water →</button></div></section>
+<section class="page explore" data-name="explore"><h1>Explore</h1><div class="choices"><button class="choice" data-page="stains"><canvas data-preview="stains"></canvas><span>Stains</span></button><button class="choice" data-page="footprints"><canvas data-preview="footprints"></canvas><span>Footprints</span></button><button class="choice" data-page="tears"><canvas data-preview="tears"></canvas><span>Tears</span></button><button class="choice" data-page="rain"><canvas data-preview="rain"></canvas><span>Rain</span></button></div></section>
+<section class="page scene" data-name="stains"><h1>Water<br>stains</h1></section>
+<section class="page scene" data-name="footprints"><h1>Footprints</h1></section>
+<section class="page scene" data-name="tears"><h1>Tears</h1></section>
+<section class="page scene rain-page" data-name="rain"><div class="rain-caption"><span>Water in motion</span><p>A surface, interrupted.<br>A thousand small arrivals.</p></div><h1>Rain<span class="rain-period">.</span></h1><div class="rain-edge" aria-hidden="true"></div></section>
+<section class="page create" data-name="create"><h1>Leave a trace</h1><form class="create-tools" id="publish-form"><label>Mark<select id="mark-type"><option value="stains">Stain</option><option value="footprints">Footprint</option><option value="tears">Tear</option><option value="rain">Ripple</option></select></label><label>Color<input type="color" id="color" value="#779daa"></label><label>Nickname · optional<input id="nickname" maxlength="30" autocomplete="nickname" placeholder="Anonymous"></label><button class="text-button" id="publish" type="submit">Publish trace →</button><small>Your marks and nickname will be visible to everyone when you publish.</small><button class="text-button" type="button" id="download-draft">Download draft</button><p class="status" id="publish-status" role="status"></p></form></section>
+<section class="page gallery" data-name="gallery"><h1>Collected traces</h1><div class="gallery-list" id="gallery-list" aria-live="polite"></div><div class="gallery-controls"><button class="text-button" id="refresh">Refresh</button><button class="text-button" id="more" hidden>Load more</button><span id="gallery-status" class="status" role="status"></span></div></section>
+<section class="page about" data-name="about"><h1>About</h1><div class="about-copy"><p>I started Water Traces by noticing the marks water leaves in everyday life: a spill on a table, wet footprints, tears on a face, and rain hitting the ground.</p><p>This website brings those moments together. You can explore each kind of mark, make your own composition, and add it to a shared collection.</p><p>The collection grows with the people who visit. Each published trace has its own page, so its creator can return to it and share it with someone else.</p></div></section>
+<section class="page" data-name="art"><div class="art-layout"><canvas id="artwork" width="1000" height="700"></canvas><div><h1>Your trace</h1><p id="art-author"></p><p id="art-status" class="status" role="status"></p><p><button class="text-button" id="download">Download image</button></p><p><a id="art-link" hidden>Open public link</a></p><p><button class="text-button" data-page="gallery">Back to collection →</button></p></div></div></section>
+</main>
+<footer><span id="hint"></span><nav aria-label="Page navigation"><button data-page="home">Home</button><button data-page="explore">Explore</button><button data-page="create">Leave a trace</button><button data-page="gallery">Collection</button></nav></footer>
+<script src="js/materials.js"></script>
+<script src="js/rain.js"></script>
 <script>
-const canvas = document.querySelector("#water");
-const ctx = canvas.getContext("2d");
-
-const scenes = [
-  {
-    title: "Water stains",
-    hint: "Click anywhere. Each click adds a different color.",
-    background: "#ffffff"
-  },
-  {
-    title: "Footprints",
-    hint: "Move or drag to leave wet footprints.",
-    background: "#f6f7f5"
-  },
-  {
-    title: "Tears",
-    hint: "Click or hold to release a tear.",
-    background: "#f4f6f8"
-  },
-  {
-    title: "Rain",
-    hint: "Click anywhere to add ripples.",
-    background: "#10191c"
-  }
-];
-
-const colors = [
-  "104,139,159",
-  "181,128,130",
-  "164,155,109",
-  "121,149,128",
-  "145,130,166"
-];
-
-let width, height;
-let scene = 0;
-let marks = [];
-let ripples = [];
-let drops = [];
-let clicks = 0;
-let lastStep = null;
-let holdTimer = null;
-let previousTime = 0;
-
-const reducedMotion =
-  matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-function resize() {
-  width = innerWidth;
-  height = innerHeight;
-
-  const ratio = Math.min(devicePixelRatio || 1, 2);
-  canvas.width = width * ratio;
-  canvas.height = height * ratio;
-  ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
-}
-
-addEventListener("resize", resize);
-resize();
-
-function addMark(x, y, size, color, footprint = false) {
-  const points = [];
-  const seed = Math.random() * 10;
-
-  for (let i = 0; i < 64; i++) {
-    const angle = i / 64 * Math.PI * 2;
-    const radius = size * (
-      1 +
-      0.09 * Math.sin(angle * 3 + seed) +
-      0.045 * Math.sin(angle * 7 + seed)
-    );
-
-    points.push([
-      Math.cos(angle) * radius,
-      Math.sin(angle) * radius * (footprint ? 1.65 : 0.8)
-    ]);
-  }
-
-  marks.push({
-    x, y, size, color, points,
-    footprint,
-    age: 0,
-    angle: clicks % 2 ? -0.17 : 0.17
-  });
-
-  if (marks.length > 80) marks.shift();
-}
-
-function addRipple(x, y, scale = 1) {
-  ripples.push({ x, y, scale, age: 0 });
-  if (ripples.length > 100) ripples.shift();
-}
-
-function interact(x, y) {
-  clicks++;
-
-  if (scene === 0) {
-    addMark(
-      x, y,
-      35 + Math.random() * 42,
-      colors[(clicks - 1) % colors.length]
-    );
-    addRipple(x, y, 0.65);
-  }
-
-  if (scene === 1) {
-    const stepX = x + (clicks % 2 ? 12 : -12);
-    addMark(
-      stepX, y,
-      12 + Math.random() * 4,
-      "108,139,145",
-      true
-    );
-    addRipple(stepX, y, 0.7);
-  }
-
-  if (scene === 2) {
-    drops.push({
-      x, y,
-      speed: 1.1,
-      length: 16 + Math.random() * 12,
-      tear: true
-    });
-  }
-
-  if (scene === 3) {
-    addRipple(x, y, 1.5);
+'use strict';
+// Set this to the deployed backend URL. Do not put account secrets here.
+const API_URL = '';
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const cv=$('#water'),cx=cv.getContext('2d'),TAU=Math.PI*2;
+const order=['home','explore','stains','footprints','tears','rain','create','gallery','about'];
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const random=(a,b)=>a+Math.random()*(b-a);
+let W,H,page='home',entered=false,items=[],draft=[],ripples=[],particles=[],drops=[],previewArt=null;
+let frameTime=0,time=0,locked=0,lastWheel=0,wheelSum=0,pointer=null,lastStep=null,hold=null,step=0,colorCycle=0,busy=false;
+let galleryEpoch=0,cursor=null,loading=false;
+const glassFrame=$('#glass-scene');
+let glassReady=false;
+function glassMessage(action,extra={}){glassFrame.contentWindow.postMessage({type:'water-glass',action,...extra},'*')}
+addEventListener('message',event=>{if(event.source===glassFrame.contentWindow&&event.data?.type==='water-glass-ready'){glassReady=true;glassFrame.hidden=page!=='tears';glassMessage('active',{value:page==='tears'});}});
+function syncGlass(){glassFrame.hidden=page!=='tears'||!glassReady;glassMessage('active',{value:page==='tears'});}
+const rainScene=new RainScene();
+const ink=['#779daa','#b77983','#8c9d80','#a393b4','#b4a678'];
+function resize(){W=innerWidth;H=innerHeight;const r=Math.min(devicePixelRatio||1,2);cv.width=W*r;cv.height=H*r;cx.setTransform(r,0,0,r,0,0)}addEventListener('resize',resize);resize();
+function makeMark(type,x,y,color){return{type,x,y,color,size:random(.035,.075),seed:random(0,100),angle:random(-.22,.22)}}
+function shape(c,m,w,h,alpha=1,age=5){WaterMaterial.draw(c,m,w,h,alpha,age,reduced)}
+function renderArt(canvas,art){const c=canvas.getContext('2d');c.clearRect(0,0,canvas.width,canvas.height);c.fillStyle='#fff';c.fillRect(0,0,canvas.width,canvas.height);for(const m of art.marks)shape(c,m,canvas.width,canvas.height)}
+function add(type,x,y,color,persist=false){const m=makeMark(type,x/W,y/H,color);if(type==='footprints')m.angle=(step++%2?-.2:.2);if(persist){if(busy)return;if(draft.length>=180){$('#publish-status').textContent='Your composition is full. Publish it when you are ready.';return}draft.push(m);saveDraft()}else{items.push({...m,age:0});if(items.length>100)items.shift()}if(type==='rain')ripples.push({x:x/W,y:y/H,t:0,color});if(ripples.length>80)ripples.shift()}
+function saveDraft(){try{localStorage.setItem('water-traces-draft-v1',JSON.stringify(draft))}catch{}}
+function validMark(m){return m&&['stains','footprints','tears','rain'].includes(m.type)&&/^#[\da-f]{6}$/i.test(m.color)&&['x','y','size','seed','angle'].every(k=>Number.isFinite(m[k]))&&m.x>=0&&m.x<=1&&m.y>=0&&m.y<=1&&m.size>=.005&&m.size<=.15&&m.seed>=0&&m.seed<=100&&Math.abs(m.angle)<=4}
+try{const stored=JSON.parse(localStorage.getItem('water-traces-draft-v1')||'[]');if(Array.isArray(stored))draft=stored.filter(validMark).slice(0,180)}catch{}
+function stopHold(){clearInterval(hold);hold=null;if(glassReady)glassMessage('up')}
+function go(name){if(!order.includes(name)&&name!=='art')return;stopHold();pointer=null;lastStep=null;items=[];drops=[];ripples=[];page=name;rainScene.reset();document.body.dataset.page=name;syncGlass();locked=performance.now()+850;$$('.page').forEach(p=>{const active=p.dataset.name===name;p.classList.toggle('active',active);p.inert=!active;p.setAttribute('aria-hidden',String(!active))});$$('[data-page]').forEach(b=>{const active=b.dataset.page===name;b.classList.toggle('current',active);active?b.setAttribute('aria-current','page'):b.removeAttribute('aria-current')});document.body.style.color=name==='rain'?'#eff5f5':'#202020';$('#hint').textContent=({home:'Scroll to explore.',explore:'Choose a scene, or scroll to explore them all.',stains:'Click to leave a stain. Scroll to continue.',footprints:'Move or drag to leave footprints.',tears:'Click or hold to release tears.',rain:'Click to add ripples.',create:'Draw on the open space. Your draft stays on this device.',gallery:'Published traces are shared with everyone.'})[name]||'';if(name==='gallery')loadGallery(true);if(name==='stains'||name==='home'){add('stains',W*.68,H*.4,ink[0]);add('stains',W*.75,H*.5,ink[1])}}
+$$('.page h1').forEach(h=>{const nodes=[...h.childNodes];h.replaceChildren();for(const node of nodes){if(node.nodeName==='BR'){h.append(document.createElement('br'));continue}for(const word of node.textContent.split(/(\s+)/)){if(!word.trim()){h.append(document.createTextNode(word));continue}const group=document.createElement('span');group.className='word';for(const char of word){const span=document.createElement('span');span.className='char';span.textContent=char;span.style.transitionDelay=reduced?'0s':`${Math.random()*.45}s`;group.append(span)}h.append(group)}}});
+$$('[data-page]').forEach(b=>b.onclick=()=>go(b.dataset.page));
+function enter(){if(entered)return;entered=true;document.body.classList.remove('waiting');$('#gate').classList.add('closed');$('#gate').inert=true;go(page);$('footer [data-page="home"]').focus()}
+let opening=false;
+$('#enter').onclick=()=>{
+  if(opening||entered)return;opening=true;
+  const ball=$('#enter');
+  if(reduced||!ball.animate){enter();return;}
+  const rect=ball.getBoundingClientRect();
+  ball.style.animation='none';ball.style.left=rect.left+'px';ball.style.top=rect.top+'px';ball.style.width=rect.width+'px';ball.style.height=rect.height+'px';ball.style.transformOrigin='center';
+  const scale=Math.hypot(innerWidth,innerHeight)*2/Math.min(rect.width,rect.height);
+  const transition=ball.animate([{transform:'scale(1)'},{transform:`scale(${scale})`}],{duration:600,easing:'cubic-bezier(.65,0,.25,1)',fill:'forwards'});
+  transition.onfinish=enter;
+};
+function change(direction){const i=order.indexOf(page);if(i>=0)go(order[Math.max(0,Math.min(order.length-1,i+direction))])}
+addEventListener('wheel',e=>{if(!entered||e.target.closest('input,select,.gallery-list,.about-copy,.art-layout'))return;e.preventDefault();const now=performance.now(),gap=now-lastWheel;lastWheel=now;if(now<locked){wheelSum=0;return}if(gap>180)wheelSum=0;const dy=e.deltaY*(e.deltaMode===1?16:e.deltaMode===2?H:1);if(Math.sign(dy)!==Math.sign(wheelSum))wheelSum=0;wheelSum+=dy;if(Math.abs(wheelSum)>70){change(Math.sign(wheelSum));wheelSum=0}},{passive:false});
+addEventListener('keydown',e=>{if(!entered||e.target.closest('input,select,button,a'))return;if(['ArrowDown','PageDown','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();change(['ArrowDown','PageDown'].includes(e.key)?1:-1)}});
+function interact(x,y){if(!entered)return;if(page==='create'){add($('#mark-type').value,x,y,$('#color').value,true);return}if(['stains','footprints'].includes(page)){add(page,x,y,ink[page==='stains'?colorCycle++%ink.length:0]);return}if(page==='tears'&&!glassReady){drops.push({x:x/W,y:y/H,v:random(8,18),tear:true});if(drops.length>90)drops.shift()}if(page==='rain')rainScene.hit(x,y,1.5)}
+cv.addEventListener('pointerdown',e=>{if(!entered||performance.now()<locked)return;stopHold();cv.setPointerCapture(e.pointerId);pointer={id:e.pointerId,x:e.clientX,y:e.clientY,startX:e.clientX,startY:e.clientY,touch:e.pointerType==='touch'};lastStep={x:e.clientX,y:e.clientY};interact(e.clientX,e.clientY);if(page==='tears'&&glassReady)glassMessage('down',{x:e.clientX/W,y:e.clientY/H});if(page==='tears'&&!glassReady)hold=setInterval(()=>{if(pointer)interact(pointer.x,pointer.y)},400)});
+cv.addEventListener('pointermove',e=>{if(pointer&&page==='tears'&&glassReady)glassMessage('move',{x:e.clientX/W,y:e.clientY/H});if(pointer){pointer.x=e.clientX;pointer.y=e.clientY;if(pointer.touch&&Math.abs(pointer.y-pointer.startY)>30)stopHold()}if(performance.now()<locked)return;if(page!=='footprints'&&!(page==='create'&&pointer))return;if(!lastStep){lastStep={x:e.clientX,y:e.clientY};return}if(Math.hypot(e.clientX-lastStep.x,e.clientY-lastStep.y)>45){interact(e.clientX,e.clientY);lastStep={x:e.clientX,y:e.clientY}}});
+cv.addEventListener('pointerup',e=>{if(pointer&&pointer.touch&&page!=='create'){const dx=e.clientX-pointer.startX,dy=e.clientY-pointer.startY;if(Math.abs(dy)>90&&Math.abs(dy)>Math.abs(dx)*1.3)change(dy<0?1:-1)}stopHold();pointer=null});
+function cancel(){stopHold();pointer=null}cv.addEventListener('pointercancel',cancel);cv.addEventListener('lostpointercapture',cancel);addEventListener('blur',cancel);
+function message(el,text){el.textContent=text}
+async function api(path,options={}){if(!API_URL)throw Error('The public collection is not connected yet. Your draft is still saved on this device.');const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),15000);try{const r=await fetch(API_URL.replace(/\/$/,'')+path,{...options,signal:controller.signal});const data=await r.json();if(!r.ok)throw Error(data.error||'The request could not be completed.');return data}finally{clearTimeout(timer)}}
+function validArt(a){return a&&typeof a.id==='string'&&typeof a.nickname==='string'&&Array.isArray(a.marks)&&a.marks.length<=180&&a.marks.every(validMark)}
+async function loadGallery(reset=false){if(loading&&!reset)return;const epoch=reset?++galleryEpoch:galleryEpoch;if(reset){cursor=null;$('#gallery-list').replaceChildren();$('#more').hidden=true}loading=true;message($('#gallery-status'),'Loading…');try{const data=await api('/traces'+(cursor?'?cursor='+encodeURIComponent(cursor):''));if(epoch!==galleryEpoch)return;for(const art of data.items.filter(validArt)){const b=document.createElement('button');b.className='art-card';const c=document.createElement('canvas');c.width=600;c.height=420;renderArt(c,art);const label=document.createElement('span');label.textContent='By '+art.nickname;b.append(c,label);b.onclick=()=>openArt(art,true);$('#gallery-list').append(b)}cursor=data.nextCursor||null;$('#more').hidden=!cursor;message($('#gallery-status'),$('#gallery-list').children.length?'Saved in the public collection.':'No traces yet. Be the first to leave one.')}catch(error){if(epoch===galleryEpoch)message($('#gallery-status'),error.name==='AbortError'?'The connection timed out. Please try again.':error.message)}finally{if(epoch===galleryEpoch)loading=false}}
+$('#refresh').onclick=()=>loadGallery(true);$('#more').onclick=()=>loadGallery(false);
+function publicLink(id){const u=new URL(location.href);u.hash='trace='+encodeURIComponent(id);return u.href}
+function openArt(art,updateHash){previewArt=art;go('art');renderArt($('#artwork'),art);message($('#art-author'),'By '+art.nickname);message($('#art-status'),'Published in the public collection.');const a=$('#art-link');a.hidden=false;a.href=publicLink(art.id);a.textContent='Open public link ↗';if(updateHash)try{history.replaceState(null,'',a.href)}catch{}}
+async function openLinked(){const match=location.hash.match(/^#trace=([a-zA-Z0-9-]+)$/);if(!match)return false;try{const data=await api('/traces/'+encodeURIComponent(match[1]));if(!validArt(data))throw Error('This trace could not be loaded.');$('#download').disabled=false;enter();openArt(data,false)}catch(error){previewArt=null;$('#artwork').getContext('2d').clearRect(0,0,1000,700);enter();go('art');message($('#art-status'),error.message);$('#art-link').hidden=true;$('#download').disabled=true}return true}
+$('#publish-form').onsubmit=async e=>{e.preventDefault();if(busy)return;if(!draft.length){message($('#publish-status'),'Make a few marks first.');return}busy=true;$('#publish').disabled=true;message($('#publish-status'),'Publishing…');const body={nickname:$('#nickname').value.trim()||'Anonymous',marks:draft.map(m=>({...m}))};try{let pending;try{pending=JSON.parse(localStorage.getItem('water-traces-pending')||'null')}catch{}if(!pending||typeof pending.key!=='string'||!pending.body||!Array.isArray(pending.body.marks)||!pending.body.marks.every(validMark)){pending={key:crypto.randomUUID(),body};try{localStorage.setItem('water-traces-pending',JSON.stringify(pending))}catch{}}const art=await api('/traces',{method:'POST',headers:{'Content-Type':'application/json','Idempotency-Key':pending.key},body:JSON.stringify(pending.body)});if(!validArt(art))throw Error('The server returned an invalid trace. Please try again.');if(JSON.stringify(draft)===JSON.stringify(pending.body.marks)){draft=[];saveDraft()}try{localStorage.removeItem('water-traces-pending');localStorage.setItem('water-traces-last-link',publicLink(art.id))}catch{}message($('#publish-status'),'Published.');$('#download').disabled=false;openArt(art,true)}catch(error){message($('#publish-status'),error.name==='AbortError'?'The connection timed out. Retry to check the same publication.':error.message)}finally{busy=false;$('#publish').disabled=false}};
+$('#download-draft').onclick=()=>{if(!draft.length){message($('#publish-status'),'Make a few marks first.');return}const c=document.createElement('canvas');c.width=1000;c.height=700;renderArt(c,{marks:draft});const a=document.createElement('a');a.download='my-water-trace.png';a.href=c.toDataURL('image/png');a.click()};
+$('#download').onclick=()=>{if(!previewArt)return;const a=document.createElement('a');a.download='water-trace-'+previewArt.id+'.png';a.href=$('#artwork').toDataURL('image/png');a.click()};
+addEventListener('hashchange',()=>openLinked());
+function drawSurface(){
+  const g=cx.createRadialGradient(W*.64,H*.6,0,W*.64,H*.6,W*.8);
+  g.addColorStop(0,'rgba(112,145,149,.13)');g.addColorStop(1,'rgba(6,16,22,0)');cx.fillStyle=g;cx.fillRect(0,0,W,H);
+  cx.lineWidth=.6;
+  for(let i=0;i<65;i++){
+    const y=H*(.38+i*.01);cx.beginPath();
+    for(let x=0;x<=W+12;x+=12){const v=y+Math.sin(x*.013+i*1.7+(reduced?0:time*.35))*1.7+Math.sin(x*.037-i)*.6;x?cx.lineTo(x,v):cx.moveTo(x,v)}
+    cx.strokeStyle=`rgba(156,190,193,${.012+(i%4)*.004})`;cx.stroke();
   }
 }
-
-function stopHolding() {
-  clearInterval(holdTimer);
-  holdTimer = null;
-}
-
-canvas.addEventListener("pointerdown", event => {
-  canvas.setPointerCapture(event.pointerId);
-  lastStep = { x: event.clientX, y: event.clientY };
-
-  interact(event.clientX, event.clientY);
-  stopHolding();
-
-  if (scene === 2) {
-    holdTimer = setInterval(() => {
-      interact(
-        event.clientX + (Math.random() - 0.5) * 16,
-        event.clientY
-      );
-    }, 400);
-  }
-});
-
-canvas.addEventListener("pointermove", event => {
-  if (scene !== 1) return;
-
-  if (
-    !lastStep ||
-    Math.hypot(
-      event.clientX - lastStep.x,
-      event.clientY - lastStep.y
-    ) > 46
-  ) {
-    interact(event.clientX, event.clientY);
-    lastStep = { x: event.clientX, y: event.clientY };
-  }
-});
-
-canvas.addEventListener("pointerup", stopHolding);
-canvas.addEventListener("pointercancel", stopHolding);
-canvas.addEventListener("lostpointercapture", stopHolding);
-addEventListener("blur", stopHolding);
-
-function addRain(initial = false) {
-  drops.push({
-    x: Math.random() * width,
-    y: initial ? Math.random() * height * 0.4 : -60,
-    speed: 4 + Math.random() * 7,
-    length: 15 + Math.random() * 55,
-    target: height * (0.45 + Math.random() * 0.55),
-    tear: false
-  });
-}
-
-function selectScene(index) {
-  scene = (index + scenes.length) % scenes.length;
-
-  stopHolding();
-  marks = [];
-  ripples = [];
-  drops = [];
-  lastStep = null;
-
-  document.body.style.background = scenes[scene].background;
-  document.body.style.color =
-    scene === 3 ? "#edf1f1" : "#272b2c";
-
-  document.querySelector("#title").textContent =
-    scenes[scene].title;
-
-  document.querySelector("#hint").textContent =
-    scenes[scene].hint;
-
-  document.querySelectorAll("[data-scene]").forEach((button, i) => {
-    button.classList.toggle("active", i === scene);
-
-    if (i === scene) {
-      button.setAttribute("aria-current", "page");
-    } else {
-      button.removeAttribute("aria-current");
-    }
-  });
-
-  if (scene === 3) {
-    for (let i = 0; i < 65; i++) addRain(true);
-  }
-}
-
-document.querySelectorAll("[data-scene]").forEach(button => {
-  button.addEventListener("click", () => {
-    selectScene(Number(button.dataset.scene));
-  });
-});
-
-addEventListener("keydown", event => {
-  if (event.key === "ArrowRight") selectScene(scene + 1);
-  if (event.key === "ArrowLeft") selectScene(scene - 1);
-});
-
-function drawMarks(dt) {
-  for (const mark of marks) {
-    mark.age += dt;
-
-    const fade =
-      Math.min(1, mark.age / 32) *
-      Math.max(0, 1 - mark.age / 2200);
-
-    ctx.save();
-    ctx.translate(mark.x, mark.y);
-    ctx.rotate(mark.angle);
-    ctx.scale(0.85 + Math.min(1, mark.age / 24) * 0.15, 1);
-
-    const gradient = ctx.createRadialGradient(
-      0, 0, mark.size * 0.05,
-      0, 0, mark.size
-    );
-
-    gradient.addColorStop(
-      0, `rgba(${mark.color},${0.035 * fade})`
-    );
-    gradient.addColorStop(
-      0.72, `rgba(${mark.color},${0.06 * fade})`
-    );
-    gradient.addColorStop(
-      0.94, `rgba(${mark.color},${0.14 * fade})`
-    );
-    gradient.addColorStop(1, `rgba(${mark.color},0)`);
-
-    ctx.beginPath();
-
-    mark.points.forEach((point, i) => {
-      if (i === 0) ctx.moveTo(...point);
-      else ctx.lineTo(...point);
-    });
-
-    ctx.closePath();
-    ctx.fillStyle = gradient;
-    ctx.fill();
-    ctx.strokeStyle = `rgba(${mark.color},${0.14 * fade})`;
-    ctx.lineWidth = 0.65;
-    ctx.stroke();
-
-    if (mark.footprint) {
-      ctx.beginPath();
-      ctx.ellipse(0, 5, 6, 12, 0, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(${mark.color},${0.06 * fade})`;
-      ctx.fill();
-    }
-
-    ctx.restore();
-  }
-
-  marks = marks.filter(mark => mark.age < 2200);
-}
-
-function drawRipples(dt) {
-  for (const ripple of ripples) {
-    ripple.age += dt;
-    const fade = Math.max(0, 1 - ripple.age / 100);
-
-    for (let i = 0; i < 3; i++) {
-      const radius = (ripple.age * 0.8 + i * 12) * ripple.scale;
-
-      ctx.beginPath();
-      ctx.ellipse(
-        ripple.x,
-        ripple.y,
-        radius,
-        radius * (scene === 3 ? 0.24 : 0.55),
-        0,
-        i * 0.1,
-        Math.PI * 2 - i * 0.25
-      );
-
-      ctx.strokeStyle = scene === 3
-        ? `rgba(177,204,211,${fade * 0.23})`
-        : `rgba(111,143,157,${fade * 0.2})`;
-
-      ctx.lineWidth = 0.7;
-      ctx.stroke();
-    }
-  }
-
-  ripples = ripples.filter(ripple => ripple.age < 100);
-}
-
-function drawDrops(dt) {
-  if (scene === 3 && !reducedMotion && Math.random() < 0.6 * dt) {
-    addRain();
-  }
-
-  for (const drop of drops) {
-    drop.y += drop.speed * dt;
-
-    if (drop.tear) {
-      drop.speed += 0.045 * dt;
-
-      ctx.save();
-      ctx.translate(drop.x, drop.y);
-      ctx.beginPath();
-      ctx.moveTo(0, -drop.length);
-      ctx.bezierCurveTo(-12, 0, -9, 10, 0, 11);
-      ctx.bezierCurveTo(9, 10, 12, 0, 0, -drop.length);
-      ctx.fillStyle = "rgba(143,169,187,0.07)";
-      ctx.strokeStyle = "rgba(107,139,159,0.36)";
-      ctx.lineWidth = 0.8;
-      ctx.fill();
-      ctx.stroke();
-      ctx.restore();
-
-      if (drop.y > height * 0.8) {
-        addRipple(drop.x, height * 0.8, 0.6);
-        addMark(drop.x, height * 0.8, 20, "135,160,180");
-        drop.dead = true;
-      }
-    } else {
-      ctx.beginPath();
-      ctx.moveTo(drop.x, drop.y);
-      ctx.lineTo(drop.x - 1.5, drop.y + drop.length);
-      ctx.strokeStyle = "rgba(195,215,220,0.22)";
-      ctx.lineWidth = 0.65;
-      ctx.stroke();
-
-      if (drop.y + drop.length >= drop.target) {
-        addRipple(drop.x, drop.target, 0.5 + Math.random());
-        drop.dead = true;
-      }
-    }
-  }
-
-  drops = drops.filter(drop => !drop.dead);
-}
-
-function animate(time) {
-  const dt = Math.min((time - previousTime) / 16.67 || 1, 2);
-  previousTime = time;
-
-  ctx.clearRect(0, 0, width, height);
-  drawMarks(dt);
-  drawRipples(dt);
-  drawDrops(dt);
-
-  requestAnimationFrame(animate);
-}
-
-addMark(width * 0.58, height * 0.42, 64, colors[0]);
-addMark(width * 0.67, height * 0.51, 25, colors[0]);
-requestAnimationFrame(animate);
+function draw(t){const dt=Math.min((t-frameTime)/1000||.016,.04);frameTime=t;time+=dt;if(page==='rain'){rainScene.draw(cx,W,H,dt,time,reduced);requestAnimationFrame(draw);return}cx.fillStyle=page==='rain'?'#10191d':page==='tears'?'#f2f5f7':'#fff';cx.fillRect(0,0,W,H);if(page==='create'){for(const m of draft)shape(cx,m,W,H)}else for(const m of items){m.age+=dt;shape(cx,m,W,H,Math.min(1,m.age*2)*Math.min(1,(35-m.age)/8),m.age)}items=items.filter(m=>m.age<35);
+for(const r of ripples){r.t+=dt;WaterMaterial.ring(cx,r.x*W,r.y*H,8+(reduced?18:r.t*36),page==='rain'?.24:.55,Math.pow(Math.max(0,1-r.t/3),2),page==='rain')}ripples=ripples.filter(r=>r.t<3);
+if(page==='rain')drawSurface();if(page==='rain'&&!reduced&&Math.random()<dt*55)drops.push({x:Math.random(),y:-.08,v:random(280,620),target:random(.5,1),length:random(12,25),tear:false});for(const d of drops){d.y+=d.v*dt/H;if(d.tear){d.v+=dt*22;cx.save();cx.lineWidth=3;cx.strokeStyle='rgba(120,148,158,.045)';cx.beginPath();cx.moveTo(d.x*W,Math.max(0,d.y*H-100));cx.lineTo(d.x*W,d.y*H);cx.stroke();cx.restore();shape(cx,{type:'tears',x:d.x,y:d.y,size:.012,angle:0,seed:1,color:ink[0]},W,H);if(d.y>.8){add('stains',d.x*W,H*.8,ink[0]);d.dead=true}}else{cx.strokeStyle='#bdd6df';cx.globalAlpha=.12;cx.lineWidth=.6;cx.beginPath();cx.moveTo(d.x*W,d.y*H);cx.lineTo(d.x*W-1,d.y*H+d.length);cx.stroke();cx.globalAlpha=1;if(d.y>=d.target){ripples.push({x:d.x,y:d.target,t:0,color:'#bdd6df'});d.dead=true}}}drops=drops.filter(d=>!d.dead).slice(-120);requestAnimationFrame(draw)}
+for(const c of $$('[data-preview]')){c.width=400;c.height=300;const type=c.dataset.preview;for(let i=0;i<5;i++)shape(c.getContext('2d'),makeMark(type,.35+i*.085,.35+Math.sin(i)*.15,ink[i%ink.length]),400,300)}
+$$('.page').forEach(p=>{p.inert=true;p.setAttribute('aria-hidden','true')});requestAnimationFrame(draw);if(location.hash.startsWith('#trace='))openLinked();
 </script>
-
 </body>
 </html>

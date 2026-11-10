@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Water Traces — Glass study</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#c1c9c4;color:#202825;font:12px Georgia,"Times New Roman",serif}canvas{position:fixed;inset:0;width:100%;height:100%;touch-action:none}header,footer{position:fixed;left:5%;right:5%;display:flex;justify-content:space-between;gap:24px;pointer-events:none}header{top:30px;letter-spacing:2px;justify-content:flex-end}footer{bottom:28px;align-items:end;line-height:1.8}h1{font:normal clamp(50px,8vw,110px)/1 Georgia,serif;letter-spacing:-.05em;margin:0 0 20px}p{margin:0;max-width:310px}button{pointer-events:auto;background:none;border:0;border-bottom:1px solid;padding:8px 0;color:inherit;font:inherit;cursor:pointer}button:focus-visible,canvas:focus-visible{outline:1px solid #243c31;outline-offset:5px}#error{position:fixed;top:25%;left:10%;right:10%;background:#fff;padding:30px}small{font-size:10px;letter-spacing:.03em}.meta{text-align:right}@media(max-width:600px){header{top:22px;font-size:10px}footer{bottom:22px}.meta{max-width:145px}h1{font-size:64px}}
+</style>
+<canvas id="glass" tabindex="0" aria-label="Water on glass. Click or hold to add water. Press Space to add a drop at the center."></canvas>
+<header><span>MATERIAL STUDY · GLASS</span></header>
+<footer><div><h1>Tears</h1><p>Touch the glass.<br>Hold to let a drop gather weight.</p></div><div class="meta"><button id="pause">Pause motion</button><p><small>Vertical glass · soft window light<br>Close view, facing the surface</small></p></div></footer>
+<p id="error" hidden></p>
+<script>if(new URLSearchParams(location.search).has("embed")){document.querySelector("header").hidden=true;document.querySelector("footer").hidden=true;document.querySelector("header").style.display="none";document.querySelector("footer").style.display="none";}</script>
+<script src="simulation.js"></script>
+<script src="glass.js"></script>
+</html>
