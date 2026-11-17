@@ -26,7 +26,7 @@ footer nav{gap:28px}footer button{font-size:12px}#hint{font-style:italic;font-si
 .choice:nth-child(4) canvas{border-radius:48% 48% 2px 2px;background:#d9e1df}
 .choice:hover canvas,.choice:focus-visible canvas{transform:translateY(-9px);box-shadow:0 22px 38px #243c3614}
 .choice span{font-size:27px;margin-top:18px;color:var(--ink);display:flex;justify-content:space-between;align-items:center}
-.choice i{font:normal 18px Georgia,serif;opacity:.45;transition:transform .4s}
+.choice i{font:normal 18px Arial,Helvetica,sans-serif;opacity:.45;transition:transform .4s}
 .choice:hover i{transform:translate(3px,-3px);opacity:1}
 .choice small{display:block;font-size:11px;font-style:italic;margin-top:7px;color:var(--muted);line-height:1.4}
 .scene-note{position:absolute;top:22%;right:8%;font-style:italic;font-size:18px!important;max-width:220px;border-top:1px solid var(--rule);padding-top:17px;color:var(--muted)}
@@ -70,8 +70,8 @@ body[data-page=rain] header,body[data-page=rain] footer{border-color:#b4ccca33}
 .menu-cards{display:flex;gap:clamp(14px,2vw,30px);overflow-x:auto;overscroll-behavior:contain;padding:30px clamp(24px,4vw,64px);flex:1;align-items:stretch;scroll-snap-type:x proximity;scrollbar-color:#65736a transparent}
 .menu-card{position:relative;flex:0 0 clamp(235px,24vw,360px);min-height:320px;max-height:700px;border:1px solid #84938a88;border-radius:28px;padding:32px;color:#f0f1e9;text-align:left;overflow:hidden;scroll-snap-align:start;display:flex;flex-direction:column;justify-content:space-between;transition:background .45s,color .45s,transform .45s}
 .menu-card:hover,.menu-card:focus-visible{background:#c5d2ca;color:#14211b;transform:translateY(-5px)}
-.menu-card-title{font:normal clamp(30px,3vw,48px)/1 Georgia,serif;letter-spacing:-.05em;max-width:250px;z-index:1}
-.menu-card-copy{font:italic 13px Georgia,serif;opacity:.75;z-index:1}
+.menu-card-title{font:normal clamp(30px,3vw,48px)/1 Arial,Helvetica,sans-serif;letter-spacing:-.05em;max-width:250px;z-index:1}
+.menu-card-copy{font:italic 13px Arial,Helvetica,sans-serif;opacity:.75;z-index:1}
 .menu-arrow{position:absolute;right:27px;bottom:27px;font-size:23px}
 .menu-art{position:absolute;inset:28% -30% 10% -15%;opacity:.55;pointer-events:none}
 .menu-art i{position:absolute;width:70%;aspect-ratio:1;border:1px solid currentColor;border-radius:50%;left:10%;top:10%}
@@ -90,3 +90,23 @@ header,footer,.intro,.about-copy,.create-tools{border-top:0;border-bottom:0}
 .home-contour{display:none}
 
 footer{justify-content:flex-end}
+
+/* Consistent, upright sans-serif typography. */
+body,button,input,select,textarea{font-family:Arial,Helvetica,sans-serif}
+.home h1 .word:last-child,.menu-top,.menu-bottom,.menu-card-copy,.choice small,.art-card span{font-style:normal}
+
+/* Explore: a simple circular index on a light ground. */
+.explore h1{top:17%;font-size:clamp(70px,10vw,150px);letter-spacing:-.05em}
+.explore .choices{top:38%;left:7%;right:7%;gap:2.5%;align-items:start}
+.explore .choice,.explore .choice:nth-child(even){padding:0;text-align:center}
+.explore .choice canvas,.explore .choice:nth-child(n) canvas{aspect-ratio:1;width:100%;border:1px solid #26322e;border-radius:50%;background:transparent;box-shadow:none;transition:background .35s,transform .35s}
+.explore .choice:hover canvas,.explore .choice:focus-visible canvas{background:#e5e9e3;transform:translateY(-5px);box-shadow:none;border-radius:50%}
+.explore .choice span{justify-content:center;font-size:clamp(16px,1.5vw,22px);margin-top:18px;letter-spacing:0}
+.explore .choice i{display:none}
+@media(max-width:700px){
+ .explore h1{top:16%;font-size:60px}
+ .explore .choices{top:30%;left:8%;right:8%;gap:18px 22px;grid-template-columns:repeat(2,minmax(0,1fr));max-height:53%;overflow:auto}
+ .explore .choice canvas,.explore .choice:nth-child(n) canvas{width:min(100%,20vh);margin:auto}
+ .explore .choice span{font-size:15px;margin-top:7px}
+}
+@media(prefers-reduced-motion:reduce){.explore .choice canvas{transition:none}.explore .choice:hover canvas{transform:none}}
