@@ -61,9 +61,21 @@
     const c=document.createElement('canvas');c.width=1000;c.height=750;const x=c.getContext('2d');
     const g=x.createLinearGradient(0,0,700,750);g.addColorStop(0,'#e5e8e1');g.addColorStop(.45,'#b9c7bc');g.addColorStop(1,'#737f6c');x.fillStyle=g;x.fillRect(0,0,1000,750);
     let seed=19;const rand=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
-    x.filter='blur(24px)';
-    for(let i=0;i<90;i++){x.fillStyle=['#72826c','#96a086','#435b48','#c7ccaa'][i%4];x.globalAlpha=.12+rand()*.16;x.beginPath();x.ellipse(rand()*1000,210+rand()*620,20+rand()*85,25+rand()*100,0,0,Math.PI*2);x.fill();}
-    x.globalAlpha=1;x.filter='blur(13px)';x.fillStyle='rgba(239,238,225,.8)';x.fillRect(235,0,23,750);x.fillRect(0,220,1000,16);x.fillStyle='rgba(44,57,52,.28)';x.fillRect(255,0,8,750);x.filter='none';
+    // Soft gradients retain the out-of-focus appearance even in browsers
+    // that do not support CanvasRenderingContext2D.filter.
+    for(let i=0;i<55;i++){
+      const px=rand()*1000,py=180+rand()*620,r=55+rand()*130;
+      const haze=x.createRadialGradient(px,py,0,px,py,r);
+      const color=['92,112,88','136,151,123','65,91,73','196,203,172'][i%4];
+      haze.addColorStop(0,`rgba(${color},.18)`);haze.addColorStop(1,`rgba(${color},0)`);
+      x.fillStyle=haze;x.fillRect(px-r,py-r,r*2,r*2);
+    }
+    function softBar(vertical,center,width){
+      const g=vertical?x.createLinearGradient(center-width,0,center+width,0):x.createLinearGradient(0,center-width,0,center+width);
+      g.addColorStop(0,'rgba(239,238,225,0)');g.addColorStop(.5,'rgba(239,238,225,.45)');g.addColorStop(1,'rgba(239,238,225,0)');
+      x.fillStyle=g;x.fillRect(0,0,1000,750);
+    }
+    softBar(true,245,38);softBar(false,225,28);
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,true);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGB,gl.RGB,gl.UNSIGNED_BYTE,c);
   }
   function resize(){const oldW=W,oldH=H;W=innerWidth;H=innerHeight;const ratio=Math.min(devicePixelRatio||1,1.5);canvas.width=Math.round(W*ratio);canvas.height=Math.round(H*ratio);gl.viewport(0,0,canvas.width,canvas.height);gl.uniform2f(locations.resolution,W,H);
