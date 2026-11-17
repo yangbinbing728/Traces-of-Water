@@ -1,0 +1,86 @@
+/* Exhibition typography and quiet material details. */
+:root{--ink:#243c36;--paper:#f8f7f2;--muted:#66766d;--rule:#788b763d}
+body{background:var(--paper);color:var(--ink)}
+header{top:27px;left:7%;right:7%;padding-bottom:17px;border-bottom:1px solid var(--rule)}
+header nav{gap:32px}header nav button{font-size:13px}
+footer{left:7%;right:7%;bottom:24px;border-top:1px solid var(--rule);padding-top:15px}
+footer nav{gap:28px}footer button{font-size:12px}#hint{font-style:italic;font-size:12px;opacity:.8}
+.page h1{color:var(--ink);font-weight:normal;letter-spacing:-.065em}
+.home h1{top:24%;font-size:clamp(86px,14vw,210px);line-height:.84}
+.home h1 .word:last-child{font-style:italic;padding-right:.1em}
+.exhibition-label{position:absolute;left:7%;top:15%;font-size:12px;font-style:italic;letter-spacing:.025em;color:var(--muted)}
+.intro{left:65%;top:58%;width:25%;max-width:340px;border-color:var(--rule);padding-top:22px}
+.intro p{font-size:clamp(18px,1.8vw,27px);line-height:1.45;margin:0 0 25px}
+.text-button{font-size:14px;padding:12px 0;border-bottom-color:#66766d75;transition:color .3s,padding .3s}
+.text-button:hover{color:#6c8265;padding-right:12px}
+.home-contour{position:absolute;width:29vw;height:34vw;max-height:65vh;right:10%;top:17%;border:1px solid #80928620;border-radius:48% 52% 58% 42% / 58% 41% 59% 42%;transform:rotate(-23deg);pointer-events:none}
+.home-contour::before,.home-contour::after{content:"";position:absolute;inset:14px;border:1px solid #80928614;border-radius:inherit}
+.home-contour::after{inset:32px}
+.section-note{position:absolute;top:18%;right:8%;margin:0;font-style:italic;color:var(--muted);font-size:15px!important;line-height:1.55!important}
+.choices{top:39%;gap:3.5%;align-items:start}
+.choice{position:relative;min-width:0}
+.choice:nth-child(even){padding-top:45px}
+.choice canvas{aspect-ratio:.95;background:#e8ece5;border-radius:48% 48% 2px 2px;box-shadow:0 14px 35px #243c3608;transition:transform .65s,border-radius .65s,box-shadow .65s}
+.choice:nth-child(2) canvas{border-radius:2px;background:#e8e9e1}
+.choice:nth-child(3) canvas{border-radius:2px 2px 48% 48%;background:#e1e7e5}
+.choice:nth-child(4) canvas{border-radius:48% 48% 2px 2px;background:#d9e1df}
+.choice:hover canvas,.choice:focus-visible canvas{transform:translateY(-9px);box-shadow:0 22px 38px #243c3614}
+.choice span{font-size:27px;margin-top:18px;color:var(--ink);display:flex;justify-content:space-between;align-items:center}
+.choice i{font:normal 18px Georgia,serif;opacity:.45;transition:transform .4s}
+.choice:hover i{transform:translate(3px,-3px);opacity:1}
+.choice small{display:block;font-size:11px;font-style:italic;margin-top:7px;color:var(--muted);line-height:1.4}
+.scene-note{position:absolute;top:22%;right:8%;font-style:italic;font-size:18px!important;max-width:220px;border-top:1px solid var(--rule);padding-top:17px;color:var(--muted)}
+.scene:not(.rain-page) h1{font-size:clamp(75px,12vw,175px);bottom:21%}
+.scene[data-name=tears] h1{color:#1f352e}
+.scene[data-name=tears] .scene-note{color:#344b3e}
+.about-aside{position:absolute;left:7%;top:44%;font-size:clamp(23px,3vw,44px);line-height:1.25;font-style:italic;color:#6d806e}
+.about-copy{top:31%;left:53%;width:36%;padding-top:20px;border-top:1px solid var(--rule)}
+.about-copy p:first-child::first-letter{font-size:3em;float:left;line-height:.85;padding:5px 7px 0 0;color:var(--ink)}
+.create-tools{border-top:1px solid var(--rule);padding-top:20px;width:230px;gap:15px}
+.create-tools label{color:var(--muted)}
+.create-tools input,.create-tools select{color:var(--ink);border-color:var(--rule)}
+.art-card canvas{border:0;box-shadow:0 8px 30px #243c360a}
+.art-card span{font-style:italic;color:var(--muted)}
+body[data-page=rain] header,body[data-page=rain] footer{border-color:#b4ccca33}
+.rain-page h1{color:#f1f1e9}.rain-caption p{color:#d0dfd9}
+#gate{background:var(--paper)}
+@media(min-width:701px) and (max-height:720px){.choices{top:36%;left:12%;right:12%}.choice canvas{aspect-ratio:1.4}.choice:nth-child(even){padding-top:22px}.exhibition-label{top:15%}}
+@media(max-width:700px){
+ header{left:7%;right:7%;top:18px;padding-bottom:10px}header nav button{font-size:12px}
+ footer{left:7%;right:7%;bottom:18px;padding-top:10px}footer nav{gap:10px}footer button{font-size:11px}#hint{font-size:11px}
+ .exhibition-label{top:16%;font-size:11px}.home h1{top:28%;font-size:clamp(78px,21vw,135px)}
+ .home-contour{width:60vw;height:70vw;right:0;top:23%;opacity:.7}
+ .intro{left:8%;top:62%;width:80%;max-width:none;padding-top:15px}.intro p{font-size:20px;margin-bottom:10px}
+ .explore h1{top:15%;font-size:55px}.section-note{top:25%;left:8%;right:auto;font-size:12px!important}.section-note br{display:none}
+ .choices{top:34%;gap:19px 20px}.choice:nth-child(even){padding-top:18px}.choice canvas{aspect-ratio:1.55}
+ .choice span{font-size:22px;margin-top:9px}.choice small{font-size:10px;margin-top:4px}
+ .scene-note{top:20%;font-size:14px!important;max-width:155px}.scene:not(.rain-page) h1{font-size:clamp(65px,17vw,110px);bottom:27%}
+ .about-aside{top:26%;font-size:21px}.about-aside br{display:none}.about-copy{left:8%;top:37%;width:84%;max-height:40%}
+ .create-tools{width:86%;padding-top:12px;gap:10px 18px}.create h1{font-size:45px}
+}
+@media(max-height:650px) and (max-width:700px){.choices{top:35%;gap:10px 16px}.choice canvas{aspect-ratio:2}.choice small{display:none}.section-note{top:26%}.intro{top:59%}.home h1{font-size:78px}}
+@media(prefers-reduced-motion:reduce){.choice canvas,.choice i,.text-button{transition:none}.choice:hover canvas{transform:none}}
+
+/* Full-screen index of water experiences. */
+.menu-overlay[hidden]{display:none}
+.menu-overlay{position:fixed;inset:0;z-index:20;background:#101412;color:#f4f3eb;display:flex;flex-direction:column;padding:clamp(22px,3vw,48px) 0;animation:menu-in .45s ease both}
+.menu-top,.menu-bottom{display:flex;justify-content:space-between;align-items:center;padding:0 clamp(24px,4vw,64px);font-size:13px;font-style:italic;letter-spacing:.03em}
+.menu-top button{color:inherit;border:1px solid #aaa;border-radius:100px;padding:12px 25px;font-size:14px}
+.menu-top button:hover{background:#e5eadd;color:#19221d}
+.menu-cards{display:flex;gap:clamp(14px,2vw,30px);overflow-x:auto;overscroll-behavior:contain;padding:30px clamp(24px,4vw,64px);flex:1;align-items:stretch;scroll-snap-type:x proximity;scrollbar-color:#65736a transparent}
+.menu-card{position:relative;flex:0 0 clamp(235px,24vw,360px);min-height:320px;max-height:700px;border:1px solid #84938a88;border-radius:28px;padding:32px;color:#f0f1e9;text-align:left;overflow:hidden;scroll-snap-align:start;display:flex;flex-direction:column;justify-content:space-between;transition:background .45s,color .45s,transform .45s}
+.menu-card:hover,.menu-card:focus-visible{background:#c5d2ca;color:#14211b;transform:translateY(-5px)}
+.menu-card-title{font:normal clamp(30px,3vw,48px)/1 Georgia,serif;letter-spacing:-.05em;max-width:250px;z-index:1}
+.menu-card-copy{font:italic 13px Georgia,serif;opacity:.75;z-index:1}
+.menu-arrow{position:absolute;right:27px;bottom:27px;font-size:23px}
+.menu-art{position:absolute;inset:28% -30% 10% -15%;opacity:.55;pointer-events:none}
+.menu-art i{position:absolute;width:70%;aspect-ratio:1;border:1px solid currentColor;border-radius:50%;left:10%;top:10%}
+.menu-art i:nth-child(2){left:37%;top:32%;width:55%}.menu-art i:nth-child(3){left:-10%;top:55%;width:48%}
+.menu-card.stain .menu-art i{border-radius:44% 56% 61% 39% / 60% 45% 55% 40%}
+.menu-card.tear .menu-art i{border-radius:4% 75% 60% 75%;transform:rotate(45deg);width:48%}
+.menu-card.rain .menu-art i{border-radius:50%;transform:scaleY(.25)}
+.menu-card.foot .menu-art i{border-radius:65% 40% 45% 50%;width:33%;transform:rotate(25deg)}
+.menu-bottom span{opacity:.6}
+@keyframes menu-in{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:none}}
+@media(max-width:700px){.menu-card{flex-basis:75vw;min-height:270px;padding:25px}.menu-cards{padding-top:25px;padding-bottom:25px}.menu-bottom{font-size:11px}.menu-top button{padding:10px 18px}}
+@media(prefers-reduced-motion:reduce){.menu-overlay{animation:none}.menu-card{transition:none}.menu-card:hover{transform:none}}
